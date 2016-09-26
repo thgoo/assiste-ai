@@ -2,20 +2,16 @@
 
 namespace App;
 
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Facebook\GraphNodes\GraphNode;
 use Facebook\GraphNodes\GraphObject;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use SammyK\LaravelFacebookSdk\SyncableGraphNodeTrait;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+class User extends Authenticatable
 {
-    use Authenticatable, CanResetPassword, SoftDeletes, SyncableGraphNodeTrait;
+    use SoftDeletes, SyncableGraphNodeTrait, Notifiable;
 
     /**
      * The attributes that should be mutated to dates.
@@ -71,7 +67,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public static function createOrUpdateGraphNode($data)
     {
-        if ($data instanceof GraphObject || $data instanceof GraphNode) {
+        if($data instanceof GraphObject || $data instanceof GraphNode) {
             $data = array_dot($data->asArray());
         }
         $fields = ['id', 'name', 'email', 'gender', 'picture.url'];
@@ -84,7 +80,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $wanted_data = static::convertGraphNodeDateTimesToStrings($wanted_data);
 
-        if (! isset($wanted_data['id'])) {
+        if(!isset($wanted_data['id'])) {
             throw new \InvalidArgumentException('Graph node id is missing');
         }
 

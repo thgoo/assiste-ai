@@ -18,7 +18,7 @@ class PagesController extends Controller
     /**
      * Show home page.
      *
-     * @return string
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function home()
     {
