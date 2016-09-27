@@ -6,19 +6,19 @@
     <div class="ui center aligned grid">
         <div class="content">
             <div class="ui segment">
-                {!! Form::open(['url' => url('threads/'.$thread->id.'/'.$thread->movie->slug), 'class' => 'ui inverted form', 'method' => 'patch']) !!}
+                {!! Form::open(['url' => url('threads/'.$thread->id.'/'.$thread->movie->slug), 'class' => 'ui inverted form', 'method' => 'put']) !!}
                     <div class="two fields">
                         <div class="three wide required field">
                             {!! Form::label('rating', 'Avaliação') !!}
                             {!! Form::select('rating', [
-                            '' => 'Não Selecionado',
-                            'Imperdível' => 'Imperdível',
-                            'Muito Bom' => 'Muito Bom',
-                            'Bom' => 'Bom',
-                            'Legal' => 'Legal',
-                            'Ruinzinho' => 'Ruinzinho',
-                            'Muito Ruim' => 'Muito Ruim',
-                            'Fique Longe' => 'Fique Longe'
+                                '' => 'Não Selecionado',
+                                'Imperdível' => 'Imperdível',
+                                'Muito Bom' => 'Muito Bom',
+                                'Bom' => 'Bom',
+                                'Legal' => 'Legal',
+                                'Ruinzinho' => 'Ruinzinho',
+                                'Muito Ruim' => 'Muito Ruim',
+                                'Fique Longe' => 'Fique Longe'
                             ], (isset($thread->rating) ? $thread->rating : null), ['class' => 'ui fluid dropdown', 'id' => 'rating', 'placeholder' => 'Título']) !!}
                         </div>
                     </div>
