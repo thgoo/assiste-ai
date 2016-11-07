@@ -28,7 +28,7 @@ $.ajax({
         item_height = $('.thread').first().height()
 
         $('.loader').removeClass('active');
-        $('.outer-threads .segment, .new').css({
+        $('.outer-threads .segment').css({
             'opacity': 1,
         });
 
