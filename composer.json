@@ -10,7 +10,9 @@
         "sammyk/laravel-facebook-sdk": "^3.4",
         "doctrine/dbal": "^2.5",
         "php-curl-class/php-curl-class": "^6.0",
-        "laravelcollective/html": "^5.3"
+        "laravelcollective/html": "^5.3",
+        "laravel/scout": "^1.1",
+        "tamayo/laravel-scout-elastic": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
