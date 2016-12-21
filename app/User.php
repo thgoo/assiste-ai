@@ -2,11 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Facebook\GraphNodes\GraphNode;
 use Facebook\GraphNodes\GraphObject;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use SammyK\LaravelFacebookSdk\SyncableGraphNodeTrait;
 
 class User extends Authenticatable
@@ -47,9 +47,9 @@ class User extends Authenticatable
      * @var array
      */
     protected static $graph_node_field_aliases = [
-        'id'                    => 'provider_id',
+        'id' => 'provider_id',
         'picture.is_silhouette' => null,
-        'picture.url'           => 'avatar',
+        'picture.url' => 'avatar',
     ];
 
     public function posts()
@@ -67,20 +67,22 @@ class User extends Authenticatable
      */
     public static function createOrUpdateGraphNode($data)
     {
-        if($data instanceof GraphObject || $data instanceof GraphNode) {
+        if ($data instanceof GraphObject || $data instanceof GraphNode) {
             $data = array_dot($data->asArray());
         }
         $fields = ['id', 'name', 'email', 'gender', 'picture.url'];
         $wanted_data = [];
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $wanted_data[$field] = $data[$field];
         }
+
+        $wanted_data['provider'] = 'Facebook';
         $wanted_data['access_token'] = \Session::get('fb_user_access_token');
         $wanted_data['last_login_at'] = date('Y-m-d H:i:s');
 
         $wanted_data = static::convertGraphNodeDateTimesToStrings($wanted_data);
 
-        if(!isset($wanted_data['id'])) {
+        if (!isset($wanted_data['id'])) {
             throw new \InvalidArgumentException('Graph node id is missing');
         }
 

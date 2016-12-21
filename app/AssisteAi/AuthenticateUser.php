@@ -3,8 +3,8 @@
 namespace App\AssisteAi;
 
 use App\User;
-use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 use Facebook\Exceptions\FacebookSDKException;
+use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 class AuthenticateUser
 {
@@ -20,16 +20,23 @@ class AuthenticateUser
 
     public function execute($post_data, $listener)
     {
-        if(!$post_data) {
+        if (!$post_data) {
             return $this->getAuthorizationFirst();
         }
 
         try {
             $user = $this->getSocialUser();
-        } catch(\PDOException $e) {
-            \Log::error('Erro ao fazer login.');
-            \Log::debug('Exception: ', ['exception' => $e]);
-            flash()->overlay('Ops!', 'Infelizmente você está banido!', 'error');
+        } catch (\PDOException $e) {
+            if ($e->getCode() == 23000) {
+                \Log::info('Usuário banido tentando fazer login.');
+                \Log::debug('Usuário:', $e->getBindings());
+                $message = 'Infelizmente você está banido!';
+            } else {
+                $message = 'Ocorreu um erro, por favor tente novamente.';
+                \Log::error('Erro ao fazer login.');
+                \Log::debug('Exception:', ['exception' => $e]);
+            }
+            flash()->overlay('Ops!', $message, 'error');
 
             return redirect('auth/login');
         }
@@ -50,17 +57,17 @@ class AuthenticateUser
         // Obtain an access token.
         try {
             $token = $this->fb->getAccessTokenFromRedirect();
-        } catch(FacebookSDKException $e) {
+        } catch (FacebookSDKException $e) {
             throw $e;
         }
 
         // Access token will be null if the user denied the request
         // or if someone just hit this URL outside of the OAuth flow.
-        if(!$token) {
+        if (!$token) {
             // Get the redirect helper
             $helper = $this->fb->getRedirectLoginHelper();
 
-            if(!$helper->getError()) {
+            if (!$helper->getError()) {
                 abort(403, 'Unauthorized action.');
                 // @TODO erro 403
             }
@@ -69,14 +76,14 @@ class AuthenticateUser
             flash()->error('Erro!', 'Para acessar o site você deve dar nos dar permissão de usar seus dados do Facebook :(');
         }
 
-        if(!$token->isLongLived()) {
+        if (!$token->isLongLived()) {
             // OAuth 2.0 client handler
             $oauth_client = $this->fb->getOAuth2Client();
 
             // Extend the access token.
             try {
                 $token = $oauth_client->getLongLivedAccessToken($token);
-            } catch(FacebookSDKException $e) {
+            } catch (FacebookSDKException $e) {
                 throw $e;
             }
         }
@@ -84,12 +91,12 @@ class AuthenticateUser
         $this->fb->setDefaultAccessToken($token);
 
         //Save for later
-        \Session::put('fb_user_access_token', (string)$token);
+        \Session::put('fb_user_access_token', (string) $token);
 
         // Get basic info on the user from Facebook.
         try {
             $response = $this->fb->get('/me?fields=id,name,email,gender,picture.width(120).height(120)');
-        } catch(FacebookSDKException $e) {
+        } catch (FacebookSDKException $e) {
             throw $e;
         }
 
