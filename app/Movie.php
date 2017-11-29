@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Laravel\Scout\Searchable;
 
 class Movie extends Model
 {
-
-    use SoftDeletes, Searchable;
+    use SoftDeletes;
 
     protected $table = 'movies';
 
@@ -28,7 +26,10 @@ class Movie extends Model
         'backdrop_path',
     ];
 
-    private static $imdb_id = null, $tmdb_id = null, $external_provider, $category;
+    private static $imdb_id = null;
+    private static $tmdb_id = null;
+    private static $external_provider;
+    private static $category;
 
     /**
      * The attributes that should be mutated to dates.
@@ -165,8 +166,7 @@ class Movie extends Model
          * Portuguese data
          */
         $tmdb_result_pt = self::callCurl('http://api.themoviedb.org/3/' . self::$category . '/' . self::$tmdb_id . '?language=pt&api_key=' . env('TMDB_API_KEY'));
-        unset($tmdb_result_pt->poster_path);
-        unset($tmdb_result_pt->backdrop_path);
+        unset($tmdb_result_pt->poster_path, $tmdb_result_pt->backdrop_path);
 
         // English data
         $tmdb_result_en = self::callCurl('http://api.themoviedb.org/3/' . self::$category . '/' . self::$tmdb_id . '?api_key=' . env('TMDB_API_KEY'));
@@ -191,5 +191,4 @@ class Movie extends Model
 
         return $result;
     }
-
 }

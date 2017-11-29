@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -136,7 +135,6 @@ return [
      */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -166,8 +164,6 @@ return [
         /*
          * Package Service Providers...
          */
-        Laravel\Scout\ScoutServiceProvider::class,
-        ScoutEngines\Elasticsearch\ElasticsearchProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         SammyK\LaravelFacebookSdk\LaravelFacebookSdkServiceProvider::class,
 
@@ -193,7 +189,6 @@ return [
      */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -229,5 +224,4 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
     ],
-
 ];
