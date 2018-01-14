@@ -67,8 +67,10 @@ class Movie extends Model
             $movie_data = self::getMovieData();
             $genres = [];
 
-            foreach ($movie_data->genres as $genre) {
-                $genres[] = $genre->name;
+            if(isset($movie_data->genres)) {
+                foreach ($movie_data->genres as $genre) {
+                    $genres[] = $genre->name;
+                }
             }
 
             if (isset($movie_data->release_date)) {
