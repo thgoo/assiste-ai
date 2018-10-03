@@ -5,7 +5,7 @@ Route::get('/', 'PagesController@home')->middleware('auth');
 Route::get('home', 'PagesController@home')->middleware('auth');
 
 // Threads
-Route::group(['prefix' => 'threads', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'threads', 'middleware' => 'auth'], function () {
     // Show
     Route::get('/', 'ThreadsController@index');
     Route::get('{id}/{slug}', 'ThreadsController@show');
@@ -24,7 +24,7 @@ Route::group(['prefix' => 'threads', 'middleware' => 'auth'], function() {
 });
 
 // Authentication
-Route::group(['prefix' => 'auth'], function() {
+Route::group(['prefix' => 'auth'], function () {
     Route::get('login', 'Auth\AuthController@showLogin')->middleware('guest');
     Route::get('facebook', 'Auth\AuthController@login')->middleware('guest');
     Route::get('logout', 'Auth\AuthController@logout')->middleware('auth');

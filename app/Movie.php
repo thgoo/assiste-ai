@@ -67,7 +67,7 @@ class Movie extends Model
             $movie_data = self::getMovieData();
             $genres = [];
 
-            if(isset($movie_data->genres)) {
+            if (isset($movie_data->genres)) {
                 foreach ($movie_data->genres as $genre) {
                     $genres[] = $genre->name;
                 }
@@ -174,7 +174,7 @@ class Movie extends Model
         $tmdb_result_en = self::callCurl('http://api.themoviedb.org/3/' . self::$category . '/' . self::$tmdb_id . '?api_key=' . env('TMDB_API_KEY'));
 
         // Merging data
-        return (object) array_merge(array_filter((array) $tmdb_result_en), array_filter((array) $tmdb_result_pt));
+        return (object)array_merge(array_filter((array)$tmdb_result_en), array_filter((array)$tmdb_result_pt));
     }
 
     /**

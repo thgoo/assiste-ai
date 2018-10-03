@@ -32,7 +32,16 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['provider', 'provider_id', 'access_token', 'name', 'username', 'email', 'avatar', 'last_login_at'];
+    protected $fillable = [
+        'provider',
+        'provider_id',
+        'access_token',
+        'name',
+        'username',
+        'email',
+        'avatar',
+        'last_login_at'
+    ];
 
     /**
      * The database table used by the model.
@@ -70,7 +79,7 @@ class User extends Authenticatable
         if ($data instanceof GraphObject || $data instanceof GraphNode) {
             $data = array_dot($data->asArray());
         }
-        $fields = ['id', 'name', 'email', 'gender', 'picture.url'];
+        $fields = ['id', 'name', 'email', 'picture.url'];
         $wanted_data = [];
         foreach ($fields as $field) {
             $wanted_data[$field] = $data[$field];

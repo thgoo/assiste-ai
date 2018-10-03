@@ -21,12 +21,12 @@ class ThreadsController extends Controller
     {
         $threads = Thread::orderBy('created_at', 'desc')->with('Movie', 'User')->get();
 
-        foreach($threads as $thread) {
+        foreach ($threads as $thread) {
             $thread->movie->description = shorten($thread->movie->description, 88);
             $thread->rating_slug = Str::slug($thread->rating);
             $thread->tmdb_id = (isset($thread->movie->externalid[0])) ? $thread->movie->externalid[0]->external_id : null;
             $thread->imdb_id = (isset($thread->movie->externalid[1])) ? $thread->movie->externalid[1]->external_id : null;
-            if($thread->user_id == Auth::user()->id) {
+            if ($thread->user_id == Auth::user()->id) {
                 $thread->can_edit = true;
             }
         }
@@ -60,7 +60,7 @@ class ThreadsController extends Controller
             Thread::verifyIfExists($movie);
 
             $thread = new Thread([
-                'rating'  => $request->input('rating'),
+                'rating' => $request->input('rating'),
                 'comment' => ($request->input('comment') == '') ? null : $request->input('comment'),
             ]);
             $thread->user()->associate(Auth::user());
@@ -73,7 +73,7 @@ class ThreadsController extends Controller
             flash()->success('Tudo Certo!', 'O título escolhido foi indicado com sucesso!');
 
             return redirect('/');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             flash()->error('Ops!', $e->getMessage());
 
             return redirect()->back()->withInput();
@@ -96,9 +96,9 @@ class ThreadsController extends Controller
             $thread->movie->setHidden(['created_at', 'updated_at', 'deleted_at']);
 
             return response()->json(['error' => false, 'thread' => $thread]);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json(['error' => true, 'message' => 'Indicação não encontrada.']);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => true, 'message' => $e->getMessage()]);
         }
     }
@@ -125,11 +125,11 @@ class ThreadsController extends Controller
             })->firstOrFail();
 
             return view('threads.edit', ['thread' => $thread]);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             flash()->error('Ops!', 'Indicação não encontrada.');
 
             return redirect('/');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             flash()->error('Ops!', $e->getMessage());
 
             return redirect('/');
@@ -160,11 +160,11 @@ class ThreadsController extends Controller
             flash()->success('Alterado!', 'Você alterou sua indicação com sucesso!');
 
             return redirect('/');
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             flash()->error('Ops!', 'Indicação não encontrada.');
 
             return redirect()->back()->withInput();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             flash()->error('Ops!', $e->getMessage());
 
             return redirect()->back()->withInput();
